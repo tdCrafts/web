@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../../partials/head") %>
+
+    <link rel="stylesheet" href="/assets/css/calculator.css">
+
+    <script src="/assets/js/calculator.js"></script>
+
+    <title>Calculator Result</title>
+</head>
+<body>
+    <%- include("../../partials/header") %>
+    <main>
+        <div class="wrapper container container-md">
+            <form class="col-7">
+                <section>
+                    <h2><i class="fa-solid fa-calculator"></i> Calculation Results</h2>
+                    <input class="button" type="submit" value="Calculate">
+                    <div class="container container-md">
+                        <div class="form-group col-3">
+                            <label for="container-count">Quantity</label>
+                            <input type="number" name="container-count" id="container-count" min="1" max="100" step="1" placeholder="Number of candles" value="<%= entry.containerCount %>">
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="container-size">Container Size</label>
+                            <div class="unit-input">
+                                <input type="number" name="container-size" id="container-size" min="0" step="0.01" placeholder="Weight of wax in each candle" value="<%= entry.containerSize %>">
+                                <select class="unit" name="unit">
+                                    <option value="oz"<%- entry.unit === "oz" ? ' selected="selected"' : "" %>>ounces</option>
+                                    <option value="g"<%- entry.unit === "g" ? ' selected="selected"' : "" %>>grams</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="container-size">Buffer</label>
+                            <div class="unit-input">
+                                <input type="number" name="container-size" id="container-size" step="0.01" placeholder="Extra weight to add to the batch" value="<%= entry.buffer ? entry.buffer : 0 %>">
+                                <select class="unit">
+                                    <option value="oz"<%- entry.unit === "oz" ? ' selected="selected"' : "" %>>ounces</option>
+                                    <option value="g"<%- entry.unit === "g" ? ' selected="selected"' : "" %>>grams</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fragrance-percent">Fragrance Percentage</label>
+                        <div class="unit-input">
+                            <input type="number" name="container-size" id="container-size" min="0" max="95" step="0.01" placeholder="Extra weight to add to the batch" value="<%= entry.fragrancePercent %>">
+                            <div class="unit unit-percent">%</div>
+                        </div>
+                    </div>
+                    <div class="results">
+                        <div class="total">
+                            <h2>Total Product</h2>
+                            <div class="num"><%= entry.totalProduct.toFixed(entry.roundTo) %></div>
+                            <div class="unit"><%= entry.longUnit %></div>
+                        </div>
+                        <div class="total">
+                            <h2>Total Wax</h2>
+                            <div class="num"><%= entry.totalWax.toFixed(entry.roundTo) %></div>
+                            <div class="unit"><%= entry.longUnit %></div>
+                        </div>
+                        <div class="total">
+                            <h2>Total Fragrance</h2>
+                            <div class="num"><%= entry.totalFragrance.toFixed(entry.roundTo) %></div>
+                            <div class="unit"><%= entry.longUnit %></div>
+                        </div>
+                    </div>
+                    <div class="wax-frag-breakdown">
+                        <h2>Waxes</h2>
+                        <% entry.waxes.forEach((wax,i) => { %>
+                        <div class="wax">
+                            <div class="form-group name">
+                                <label for="wax-<%= i %>-name">Wax Name</label>
+                                <input type="text" name="wax-name[<%= i %>]" id="wax-<%= i %>-name" value="<%= wax.name %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="wax-<%= i %>-percent">Wax Percent</label>
+                                <div class="unit-input">
+                                    <input type="number" name="wax-percent[<%= i %>]" id="wax-<%= i %>-percent" min="1" max="100" step="0.1" value="<%= wax.percent %>">
+                                    <div class="unit unit-percent">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="results">
+                            <% entry.waxes.forEach(wax => { %>
+                            <div>
+                                <h2><%= wax.name %></h2>
+                                <div class="num"><%= (entry.totalWax * wax.percent / 100).toFixed(entry.roundTo) %></div>
+                                <div class="unit"><%= entry.longUnit %></div>
+                            </div>
+                            <% }) %>
+                        </div>
+                        <% }) %>
+                        <h2>Fragrances</h2>
+                        <% entry.fragrances.forEach((frag,i) => { %>
+                        <div class="fragrance">
+                            <div class="form-group name">
+                                <label for="frag-<%= i %>-name">Fragrance Name</label>
+                                <input type="text" name="frag-name[<%= i %>]" id="frag-<%= i %>-name" value="<%= frag.name %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="frag-<%= i %>-percent">Fragrance Percent</label>
+                                <div class="unit-input">
+                                    <input type="number" name="frag-percent[<%= i %>]" id="frag-<%= i %>-percent" min="1" max="100" step="0.1" value="<%= frag.percent %>">
+                                    <div class="unit unit-percent">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="results">
+                            <% entry.fragrances.forEach(frag => { %>
+                            <div>
+                                <h2><%= frag.name %></h2>
+                                <div class="num"><%= (entry.totalFragrance * frag.percent / 100).toFixed(entry.roundTo) %></div>
+                                <div class="unit"><%= entry.longUnit %></div>
+                            </div>
+                            <% }) %>
+                        </div>
+                        <% }) %>
+                    </div>
+                    <input class="button" type="submit" value="Calculate">
+                </section>
+            </form>
+            <div class="col-5">
+                <section>
+                    <h2><i class="fa-solid fa-circle-plus"></i> New Caculation</h2>
+                </section>
+            </div>
+        </div>
+    </main>
+    <%- include("../../partials/footer") %>
+</body>
+</html>

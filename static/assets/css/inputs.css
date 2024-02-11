@@ -1,0 +1,54 @@
+input[type=text],
+input[type=number] {
+    display: block;
+    width: calc(100% - 1.6em);
+    font-family: "Libre Baskerville", serif;
+    font-size: .9em;
+    background-color: var(--tertiary-background-color);
+    padding: .6em .8em;
+    margin: .4em 0;
+    border: none;
+    border-bottom: 2px solid var(--primary-theme-color);
+    border-radius: .2em;
+}
+
+.unit-input {
+    display: flex;
+    background-color: var(--tertiary-background-color);
+    border-bottom: 2px solid var(--primary-theme-color);
+    border-radius: .2em;
+    margin: .35em 0 .4em 0;
+    overflow: hidden;
+}
+
+.unit-input input {
+    flex-grow: 1;
+}
+
+.unit-input input,
+.unit-input select {
+    border: none;
+    background-color: transparent;
+    margin: 0;
+}
+
+.unit-input div.unit {
+    color: var(--secondary-text-color);
+    display: grid;
+    padding: 0 .8em;
+    align-items: center;
+}
+
+.form-group {
+    margin: .6em;
+}
+
+.button {
+    font-family: "Libre Baskerville", serif;
+    background-color: var(--primary-theme-color);
+    color: var(--tertiary-background-color);
+    margin: .4em;
+    padding: .6em .8em;
+    border: none;
+    border-radius: .2em;
+}
