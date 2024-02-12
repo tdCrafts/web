@@ -3,14 +3,14 @@ const router = express.Router();
 
 const { CalculatorEntry } = require("../schemas");
 
-router.get("/", (req, res) => {
+router.get("/candle", (req, res) => {
     res.send("nyi");
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/candle/:id", async (req, res) => {
     try {
         const entry = await CalculatorEntry.findById(req.params.id);
-        res.render("pages/calculator/result", {entry});
+        res.render("pages/calculator/candle/result", {entry});
         return;
     } catch(err) {
         console.error(err);

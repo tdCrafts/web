@@ -39,6 +39,7 @@ function parseObject(form, object) {
         if (!percent) return;
         const objPercent = Number(percent.value);
         objects.push({
+            id: objName.substring(objName.indexOf("[") + 1, objName.indexOf("]")),
             name: objName,
             percent: objPercent,
         });
@@ -103,6 +104,20 @@ function updateCalculator(form) {
     $(".fragranceResults").html(fragHtml);
 }
 
+function parseData(form) {
+    const raw = form.serializeArray();
+    return {
+        id: raw.find(x => x.name === "id").value,
+        containerCount: Number(raw.find(x => x.name === "container-count").value),
+        containerSize: Number(raw.find(x => x.name === "container-size").value),
+        buffer: Number(raw.find(x => x.name === "buffer").value),
+        unit: raw.find(x => x.name === "unit").value,
+        fragrancePercent: Number(raw.find(x => x.name === "fragrance-percent").value),
+        waxes: parseWax(form),
+        fragrances: parseFragrance(form),
+    };
+}
+
 $(function() {
     $(".unit").on("change", function() {
         $(this).closest("form").find(".unit").val($(this).val());
@@ -114,5 +129,17 @@ $(function() {
         if (!form) return;
 
         updateCalculator(form);
+    });
+
+    $("#calculatorResult").on("submit", function(e) {
+        const form = $(this);
+        const data = parseData(form);
+        console.log(data);
+        $.post(
+            `/api/calculator/candle/${data.id}`,
+            data,
+            console.log
+        );
+        return false;
     });
 });

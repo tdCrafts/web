@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include("../../partials/head") %>
+    <%- include("../../../partials/head") %>
 
     <link rel="stylesheet" href="/assets/css/calculator.css">
 
-    <script src="/assets/js/calculator.js"></script>
+    <script src="/assets/js/candleCalculator.js"></script>
 
     <title>Calculator Result</title>
 </head>
 <body>
-    <%- include("../../partials/header") %>
+    <%- include("../../../partials/header") %>
     <main>
         <div class="wrapper container container-md">
-            <form class="col-7">
+            <form class="col-7" id="calculatorResult">
+                <input type="hidden" name="id" value="<%= entry._id %>">
                 <section>
                     <h2><i class="fa-solid fa-calculator"></i> Calculation Results</h2>
                     <input class="button" type="submit" value="Save">
@@ -131,6 +132,6 @@
             </div>
         </div>
     </main>
-    <%- include("../../partials/footer") %>
+    <%- include("../../../partials/footer") %>
 </body>
 </html>
