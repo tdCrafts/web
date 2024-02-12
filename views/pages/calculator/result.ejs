@@ -16,7 +16,7 @@
             <form class="col-7">
                 <section>
                     <h2><i class="fa-solid fa-calculator"></i> Calculation Results</h2>
-                    <input class="button" type="submit" value="Calculate">
+                    <input class="button" type="submit" value="Save">
                     <div class="container container-md">
                         <div class="form-group col-3">
                             <label for="container-count">Quantity</label>
@@ -33,9 +33,9 @@
                             </div>
                         </div>
                         <div class="form-group col-4">
-                            <label for="container-size">Buffer</label>
+                            <label for="buffer">Buffer</label>
                             <div class="unit-input">
-                                <input type="number" name="container-size" id="container-size" step="0.01" placeholder="Extra weight to add to the batch" value="<%= entry.buffer ? entry.buffer : 0 %>">
+                                <input type="number" name="buffer" id="buffer" step="0.01" placeholder="Extra weight to add to the batch" value="<%= entry.buffer ? entry.buffer : 0 %>">
                                 <select class="unit">
                                     <option value="oz"<%- entry.unit === "oz" ? ' selected="selected"' : "" %>>ounces</option>
                                     <option value="g"<%- entry.unit === "g" ? ' selected="selected"' : "" %>>grams</option>
@@ -46,44 +46,44 @@
                     <div class="form-group">
                         <label for="fragrance-percent">Fragrance Percentage</label>
                         <div class="unit-input">
-                            <input type="number" name="container-size" id="container-size" min="0" max="95" step="0.01" placeholder="Extra weight to add to the batch" value="<%= entry.fragrancePercent %>">
+                            <input type="number" name="fragrance-percent" id="fragrance-percent" min="0" max="95" step="0.01" placeholder="Extra weight to add to the batch" value="<%= entry.fragrancePercent %>">
                             <div class="unit unit-percent">%</div>
                         </div>
                     </div>
                     <div class="results">
                         <div class="total">
                             <h2>Total Product</h2>
-                            <div class="num"><%= entry.totalProduct.toFixed(entry.roundTo) %></div>
+                            <div class="num totalProduct"><%= entry.totalProduct.toFixed(entry.roundTo) %></div>
                             <div class="unit"><%= entry.longUnit %></div>
                         </div>
                         <div class="total">
                             <h2>Total Wax</h2>
-                            <div class="num"><%= entry.totalWax.toFixed(entry.roundTo) %></div>
+                            <div class="num totalWax"><%= entry.totalWax.toFixed(entry.roundTo) %></div>
                             <div class="unit"><%= entry.longUnit %></div>
                         </div>
                         <div class="total">
                             <h2>Total Fragrance</h2>
-                            <div class="num"><%= entry.totalFragrance.toFixed(entry.roundTo) %></div>
+                            <div class="num totalFragrance"><%= entry.totalFragrance.toFixed(entry.roundTo) %></div>
                             <div class="unit"><%= entry.longUnit %></div>
                         </div>
                     </div>
-                    <div class="wax-frag-breakdown">
+                    <div class="wax-breakdown">
                         <h2>Waxes</h2>
-                        <% entry.waxes.forEach((wax,i) => { %>
+                        <% entry.waxes.forEach(wax => { %>
                         <div class="wax">
                             <div class="form-group name">
-                                <label for="wax-<%= i %>-name">Wax Name</label>
-                                <input type="text" name="wax-name[<%= i %>]" id="wax-<%= i %>-name" value="<%= wax.name %>">
+                                <label for="wax-<%= wax._id %>-name">Wax Name</label>
+                                <input type="text" name="wax-name[<%= wax._id %>]" id="wax-<%= wax._id %>-name" value="<%= wax.name %>">
                             </div>
                             <div class="form-group">
-                                <label for="wax-<%= i %>-percent">Wax Percent</label>
+                                <label for="wax-<%= wax._id %>-percent">Wax Percent</label>
                                 <div class="unit-input">
-                                    <input type="number" name="wax-percent[<%= i %>]" id="wax-<%= i %>-percent" min="1" max="100" step="0.1" value="<%= wax.percent %>">
+                                    <input type="number" name="wax-percent[<%= wax._id %>]" id="wax-<%= wax._id %>-percent" min="1" max="100" step="0.1" value="<%= wax.percent %>">
                                     <div class="unit unit-percent">%</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="results">
+                        <div class="results waxResults">
                             <% entry.waxes.forEach(wax => { %>
                             <div>
                                 <h2><%= wax.name %></h2>
@@ -93,22 +93,24 @@
                             <% }) %>
                         </div>
                         <% }) %>
+                    </div>
+                    <div class="frag-breakdown">
                         <h2>Fragrances</h2>
-                        <% entry.fragrances.forEach((frag,i) => { %>
+                        <% entry.fragrances.forEach(frag => { %>
                         <div class="fragrance">
                             <div class="form-group name">
-                                <label for="frag-<%= i %>-name">Fragrance Name</label>
-                                <input type="text" name="frag-name[<%= i %>]" id="frag-<%= i %>-name" value="<%= frag.name %>">
+                                <label for="frag-<%= frag._id %>-name">Fragrance Name</label>
+                                <input type="text" name="frag-name[<%= frag._id %>]" id="frag-<%= frag._id %>-name" value="<%= frag.name %>">
                             </div>
                             <div class="form-group">
-                                <label for="frag-<%= i %>-percent">Fragrance Percent</label>
+                                <label for="frag-<%= frag._id %>-percent">Fragrance Percent</label>
                                 <div class="unit-input">
-                                    <input type="number" name="frag-percent[<%= i %>]" id="frag-<%= i %>-percent" min="1" max="100" step="0.1" value="<%= frag.percent %>">
+                                    <input type="number" name="frag-percent[<%= frag._id %>]" id="frag-<%= frag._id %>-percent" min="1" max="100" step="0.1" value="<%= frag.percent %>">
                                     <div class="unit unit-percent">%</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="results">
+                        <div class="results fragranceResults">
                             <% entry.fragrances.forEach(frag => { %>
                             <div>
                                 <h2><%= frag.name %></h2>
@@ -119,7 +121,7 @@
                         </div>
                         <% }) %>
                     </div>
-                    <input class="button" type="submit" value="Calculate">
+                    <input class="button" type="submit" value="Save">
                 </section>
             </form>
             <div class="col-5">
