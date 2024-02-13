@@ -282,14 +282,19 @@ $(function() {
     $("#calculatorResult").on("submit", function(e) {
         const form = $(this);
         const data = parseData(form);
-        api.post(`/api/calculator/candle/${data.id}`, data, function(data) {
+        const isNew = data.id === "new";
+        api.post(`/api/calculator/candle/${isNew ? "" : data.id}`, data, function(data) {
             if (data.ok) {
-                data.changedIds.forEach(changedId => {
-                    RESET_FIELDS.forEach(resetField => {
-                        $(`input[name="${resetField}[${changedId.old}]"]`).attr("name", `${resetField}[${changedId.new}]`);
+                if (isNew) {
+                    window.location.href = "/calculator/candle/" + data.data._id;
+                } else {
+                    data.changedIds.forEach(changedId => {
+                        RESET_FIELDS.forEach(resetField => {
+                            $(`input[name="${resetField}[${changedId.old}]"]`).attr("name", `${resetField}[${changedId.new}]`);
+                        });
                     });
-                });
-                statusPopup("success", "Saved!", 1250);
+                    statusPopup("success", "Saved!", 1250);
+                }
             } else {
                 statusPopup("danger", data.error.replace(/\n/g, "<br>"));
             }
