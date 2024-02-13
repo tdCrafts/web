@@ -18,4 +18,8 @@ router.get("/candle/:id", async (req, res) => {
     res.send("Unknown calc entry");
 });
 
+router.get("/", (req, res) => {
+    res.redirect("/calculator/candle");
+});
+
 module.exports = router;
