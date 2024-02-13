@@ -5,6 +5,11 @@
     border-radius: .25rem;
 }
 
+.alert[onclick],
+.alert.click {
+    cursor: pointer;
+}
+
 .alert p {
     margin-bottom: 0;
 }
