@@ -37,12 +37,24 @@
     text-transform: uppercase;
 }
 
-.wax,
-.fragrance {
+.object {
     display: flex;
+    align-items: center;
 }
 
-.wax .name,
-.fragrance .name {
+.object .form-group {
+    flex-basis: 0;
+}
+
+.object .form-group label {
+    text-wrap: nowrap;
+}
+
+.object .name {
     flex-grow: 1;
+}
+
+.object .remove {
+    padding: 1em;
+    color: var(--tertiary-text-color)
 }
