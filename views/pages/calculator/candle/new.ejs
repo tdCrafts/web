@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../../../partials/head") %>
+
+    <link rel="stylesheet" href="/assets/css/calculator.css">
+
+    <script src="/assets/js/candleCalculator.js"></script>
+
+    <title>Candle Calculator - crafty.tools</title>
+</head>
+<body>
+    <%- include("../../../partials/header", {page:"calculator/candle"}) %>
+    <main>
+        <div class="wrapper container container-md">
+            <form class="col-12" id="calculatorResult">
+                <input type="hidden" name="id" value="new">
+                <section>
+                    <h2><i class="fa-solid fa-calculator"></i> Candle Calculator</h2>
+                    <input class="button" type="submit" value="Save as new Calculator Entry">
+                    <div class="cont-breakdown">
+                        <h2>Containers</h2>
+                        <div class="containers">
+                            <div class="object cont" data-type="cont">
+                                <div class="form-group">
+                                    <label for="cont-initial-quantity">Quantity</label>
+                                    <input type="number" name="cont-quantity[initial]" id="cont-initial-quantity" min="1" step="1" value="1">
+                                </div>
+                                <div class="form-group name">
+                                    <label for="cont-initial-name">Container Name</label>
+                                    <input type="text" name="cont-name[initial]" id="cont-initial-name" value="Container 1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cont-initial-size">Container Size</label>
+                                    <div class="unit-input">
+                                        <input type="number" name="cont-size[initial]" id="cont-initial-size" min="0" step="0.01" value="6">
+                                        <select class="unit">
+                                            <option value="oz" selected="selected">ounces</option>
+                                            <option value="g">grams</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="remove" style="display:none;">
+                                    <a href="#" label="Remove" data-type="cont"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button add-container" type="button"><i class="fa-solid fa-circle-plus"></i> Add Container</button>
+                    </div>
+                    <div class="container container-md">
+                        <div class="form-group col-5">
+                            <label for="buffer">Buffer</label>
+                            <div class="unit-input">
+                                <input type="number" name="buffer" id="buffer" step="0.01" placeholder="Extra weight to add to the batch" value="0">
+                                <select class="unit" name="unit">
+                                    <option value="oz" selected="selected">ounces</option>
+                                    <option value="g">grams</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-7">
+                            <label for="fragrance-percent">Fragrance Percentage</label>
+                            <div class="unit-input">
+                                <input type="number" name="fragrance-percent" id="fragrance-percent" min="0" max="95" step="0.01" placeholder="% Fragrance of total weight" value="8">
+                                <div class="unit unit-percent">%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="results">
+                        <div class="total">
+                            <h2>Total Product</h2>
+                            <div class="num totalProduct">6.00</div>
+                            <div class="unit">ounces</div>
+                        </div>
+                        <div class="total">
+                            <h2>Total Wax</h2>
+                            <div class="num totalWax">5.52</div>
+                            <div class="unit">ounces</div>
+                        </div>
+                        <div class="total">
+                            <h2>Total Fragrance</h2>
+                            <div class="num totalFragrance">0.48</div>
+                            <div class="unit">ounces</div>
+                        </div>
+                    </div>
+                    <div class="wax-breakdown">
+                        <h2>Waxes</h2>
+                        <div class="waxes">
+                            <div class="object wax" data-type="wax">
+                                <div class="form-group name">
+                                    <label for="wax-initial-name">Wax Name</label>
+                                    <input type="text" name="wax-name[initial]" id="wax-initial-name" value="Wax 1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="wax-initial-percent">Wax Percent</label>
+                                    <div class="unit-input">
+                                        <input type="number" name="wax-percent[initial]" id="wax-initial-percent" min="1" max="100" step="0.1" value="100">
+                                        <div class="unit unit-percent">%</div>
+                                    </div>
+                                </div>
+                                <div class="remove" style="display:none;">
+                                    <a href="#" label="Remove" data-type="wax"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button add-wax" type="button"><i class="fa-solid fa-circle-plus"></i> Add Wax</button>
+                        <div class="results waxResults">
+                            <div>
+                                <h2>Wax 1</h2>
+                                <div class="num">5.52</div>
+                                <div class="unit">ounces</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="frag-breakdown">
+                        <h2>Fragrances</h2>
+                        <div class="fragrances">
+                            <div class="object frag" data-type="frag">
+                                <div class="form-group name">
+                                    <label for="frag-initial-name">Fragrance Name</label>
+                                    <input type="text" name="frag-name[initial]" id="frag-initial-name" value="Fragrance 1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="frag-initial-percent">Fragrance Percent</label>
+                                    <div class="unit-input">
+                                        <input type="number" name="frag-percent[initial]" id="frag-initial-percent" min="1" max="100" step="0.1" value="100">
+                                        <div class="unit unit-percent">%</div>
+                                    </div>
+                                </div>
+                                <div class="remove" style="display:none;">
+                                    <a href="#" label="Remove" data-type="frag"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button add-fragrance" type="button"><i class="fa-solid fa-circle-plus"></i> Add Fragrance</button>
+                        <div class="results fragranceResults">
+                            <div>
+                                <h2>Fragrance 1</h2>
+                                <div class="num">0.48</div>
+                                <div class="unit">ounces</div>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="button" type="submit" value="Save as new Calculator Entry">
+                </section>
+            </form>
+        </div>
+    </main>
+    <%- include("../../../partials/footer") %>
+</body>
+</html>

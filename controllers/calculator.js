@@ -4,7 +4,7 @@ const router = express.Router();
 const { CalculatorEntry } = require("../schemas");
 
 router.get("/candle", (req, res) => {
-    res.send("nyi");
+    res.render("pages/calculator/candle/new");
 });
 
 router.get("/candle/:id", async (req, res) => {
