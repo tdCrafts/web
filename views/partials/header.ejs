@@ -1,0 +1,15 @@
+<% 
+page = locals?.page ? locals.page : "index";
+%><header>
+    <div class="wrapper">
+        <a href="/">
+            <h1>crafty.tools</h1>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="/"<% if (page === "index") { %> class="active"<% } %>>Home</a></li>
+                <li><a href="/calculator/candle"<% if (page === "calculator/candle") { %> class="active"<% } %>>Candle Calculator</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
