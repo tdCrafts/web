@@ -31,6 +31,11 @@ const CANDLE_DATA = [
         type: "object",
         minlength: 1,
     },
+    {
+        prop: "unit",
+        type: "string",
+        matches: ["oz", "g"],
+    }
 ];
 
 const verifyData = (data,rules) => {
@@ -68,6 +73,12 @@ const verifyData = (data,rules) => {
         if (reqData.hasOwnProperty("maxlength")) {
             if (data[reqData.prop].length > reqData.maxlength) {
                 return errors.push(`Required property ${reqData.prop} is above the maximum length of ${reqData.maxlength}`);
+            }
+        }
+
+        if (reqData.hasOwnProperty("matches")) {
+            if (!reqData.matches.includes(data[reqData.prop])) {
+                return errors.push(`Required property ${reqData.prop} must match one of (${reqData.matches.join(", ")})`);
             }
         }
     });
@@ -146,6 +157,50 @@ const verifyData = (data,rules) => {
         return true;
     }
 }
+
+router.post("/candle/", async (req, res) => {
+    try {
+        verifyData(req.body, CANDLE_DATA);
+    } catch(err) {
+        return res.json({ok: false, error: "Validation error(s): " + err});
+    }
+
+    const entryData = {
+        buffer: req.body.buffer,
+        fragrancePercent: req.body.fragrancePercent,
+        unit: req.body.unit,
+        containers: req.body.containers.map(x => {
+            return {
+                name: x.name,
+                size: x.size,
+                quantity: x.quantity,
+            }
+        }),
+        waxes: req.body.waxes.map(x => {
+            return {
+                name: x.name,
+                percent: x.percent,
+            }
+        }),
+        fragrances: req.body.fragrances.map(x => {
+            return {
+                name: x.name,
+                percent: x.percent,
+            }
+        }),
+    };
+
+    try {
+        const entry = await CalculatorEntry.create(entryData);
+        if (!entry) {
+            return res.json({ok: false, error: "Calculator entry not created!"});
+        }
+        res.json({ok: true, data: entry});
+    } catch(err) {
+        console.error(err);
+        res.json({ok: false, error: "An unknown error occurred"});
+    }
+});
 
 router.post("/candle/:id", async (req, res) => {
     try {
