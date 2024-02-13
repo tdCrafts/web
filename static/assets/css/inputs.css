@@ -44,6 +44,7 @@ input[type=number] {
 }
 
 .button {
+    font-size: .9rem;
     font-family: "Libre Baskerville", serif;
     background-color: var(--primary-theme-color);
     color: var(--tertiary-background-color);
@@ -51,4 +52,9 @@ input[type=number] {
     padding: .6em .8em;
     border: none;
     border-radius: .2em;
+    /* anchor button styles */
+    display: inline-block;
+    text-decoration: none;
+    /* input styles */
+    cursor: pointer;
 }
