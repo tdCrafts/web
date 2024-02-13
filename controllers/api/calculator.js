@@ -214,8 +214,10 @@ router.post("/candle/:id", async (req, res) => {
         if (!entry) {
             return res.json({ok: false, error: "Calculator entry not found!"});
         }
+        
         entry.buffer = req.body.buffer;
         entry.fragrancePercent = req.body.fragrancePercent;
+        entry.unit = req.body.unit;
 
         let newContainers = [];
         entry.containers = entry.containers.filter(x => req.body.containers.find(y => String(x._id) === y.id));
