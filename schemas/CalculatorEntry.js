@@ -1,14 +1,6 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-    containerSize: {
-        type: Number,
-        required: true,
-    },
-    containerCount: {
-        type: Number,
-        required: true,
-    },
     buffer: {
         type: Number,
         default: null,
@@ -21,6 +13,10 @@ const schema = new mongoose.Schema({
     fragrancePercent: {
         type: Number,
         default: 10,
+    },
+    containers: {
+        type: [{name: String, quantity: Number, size: Number}],
+        required: true,
     },
     waxes: {
         type: [{name: String, percent: Number}],
@@ -53,9 +49,18 @@ schema.virtual("roundTo")
         return this.unit === "oz" ? 2 : 1;
     });
 
+schema.virtual("totalSize")
+    .get(function() {
+        let totalSize = 0;
+        this.containers.forEach(container => {
+            totalSize += container.size * container.quantity;
+        });
+        return totalSize;
+    });
+
 schema.virtual("totalProduct")
     .get(function() {
-        return (this.containerSize * this.containerCount) + (this.buffer ? this.buffer : 0);
+        return this.totalSize + (this.buffer ? this.buffer : 0);
     });
 
 schema.virtual("totalWax")
