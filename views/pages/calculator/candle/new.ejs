@@ -14,7 +14,7 @@
     <%- include("../../../partials/header", {page:"calculator/candle"}) %>
     <main>
         <div class="wrapper container container-md">
-            <form class="col-12" id="calculatorResult">
+            <form class="col-8" id="calculatorResult">
                 <input type="hidden" name="id" value="new">
                 <section>
                     <h2><i class="fa-solid fa-calculator"></i> Candle Calculator</h2>
@@ -151,6 +151,16 @@
                     <input class="button" type="submit" value="Save as new Calculator Entry">
                 </section>
             </form>
+            <div class="col-4">
+                <section>
+                    <h2><i class="fa-solid fa-computer-mouse-scrollwheel"></i> Actions</h2>
+                    <nav class="actions">
+                        <ul>
+                            <li><a href="/calculator/candle" class="button"><i class="fa-solid fa-rotate-left"></i> Reset All Fields</a></li>
+                        </ul>
+                    </nav>
+                </section>
+            </div>
         </div>
     </main>
     <%- include("../../../partials/footer") %>

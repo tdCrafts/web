@@ -192,6 +192,7 @@ function parseData(form) {
 
 let nextId = 0;
 
+let formHasChanged = false;
 const formUpdate = function() {
     const ele = $(this);
 
@@ -225,6 +226,8 @@ const formUpdate = function() {
             }
         }
     }
+
+    formHasChanged = true;
 
     updateCalculator(form);
 }
@@ -294,6 +297,7 @@ $(function() {
                         });
                     });
                     statusPopup("success", "Saved!", 1250);
+                    formHasChanged = false;
                 }
             } else {
                 statusPopup("danger", data.error.replace(/\n/g, "<br>"));
@@ -301,6 +305,13 @@ $(function() {
         });
         return false;
     });
+
+    window.onbeforeunload = function(e) {
+        if (formHasChanged) {
+            e.preventDefault();
+            e.returnValue = "";
+        }
+    }
 
     $(".remove a").on("click", handleRemove);
 

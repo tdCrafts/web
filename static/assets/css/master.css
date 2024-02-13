@@ -8,7 +8,7 @@
     --tertiary-text-color: #2c2e2e;
     
     --primary-theme-color: #2b7aa8;
-    --secondary-theme-color: #2e82b2;
+    --secondary-theme-color: #1f6791;
 
     --shadow: 2px 2px 8px rgba(0,0,0,0.2);
 }
@@ -114,6 +114,19 @@ header nav a.active::after {
 
 header nav a:hover::after {
     width: 100%;
+}
+
+nav.actions ul {
+    display: block;
+    border-radius: .2em;
+    overflow: hidden;
+}
+
+nav.actions ul li a {
+    display: block;
+    margin: 0;
+    border-radius: 0;
+    border-bottom: 2px solid var(--secondary-theme-color);
 }
 
 footer nav {
