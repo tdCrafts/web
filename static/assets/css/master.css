@@ -143,6 +143,10 @@ footer nav a {
     max-width: 80em;
 }
 
+.xs-wrapper {
+    max-width: 32em;
+}
+
 section {
     background-color: var(--secondary-background-color);
     margin: .8em;
