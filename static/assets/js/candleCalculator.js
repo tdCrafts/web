@@ -288,6 +288,7 @@ $(function() {
         const isNew = data.id === "new";
         api.post(`/api/calculator/candle/${isNew ? "" : data.id}`, data, function(data) {
             if (data.ok) {
+                formHasChanged = false;
                 if (isNew) {
                     window.location.href = "/calculator/candle/" + data.data._id;
                 } else {
@@ -297,7 +298,6 @@ $(function() {
                         });
                     });
                     statusPopup("success", "Saved!", 1250);
-                    formHasChanged = false;
                 }
             } else {
                 statusPopup("danger", data.error.replace(/\n/g, "<br>"));
