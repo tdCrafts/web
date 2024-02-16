@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../../partials/head") %>
+
+    <title>Edit Account - crafty.tools</title>
+    <meta name="description" content="Easily calculate wax and fragrance weights for multiple containers, waxes, and fragrances! Save your calculations and batches for easy management of your supplies.">
+</head>
+<body>
+    <%- include("../../partials/header", {page:"account/create"}) %>
+    <main>
+        <div class="wrapper xs-wrapper">
+            <section>
+                <h2><i class="fa-solid fa-user-plus"></i> View and Edit your Account</h2>
+                <a href="/account/logout" class="button">Log Out</a>
+                <form action="/account" method="post">
+                    <div class="container container-sm">
+                        <div class="form-group col-6">
+                            <label for="firstName">First Name</label>
+                            <input type="text" name="firstName" id="firstName" placeholder="Jane" required="required" value="<%= user.firstName %>">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" name="lastName" id="lastName" placeholder="Doe" required="required" value="<%= user.lastName %>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="maker@gmail.com" required="required" value="<%= user.email %>">
+                    </div>
+                    <input type="submit" value="Edit" class="button">
+                </form>
+            </section>
+        </div>
+    </main>
+    <%- include("../../partials/footer") %>
+</body>
+</html>

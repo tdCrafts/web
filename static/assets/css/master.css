@@ -124,9 +124,19 @@ nav.actions ul {
 
 nav.actions ul li a {
     display: block;
-    margin: 0;
-    border-radius: 0;
-    border-bottom: 2px solid var(--secondary-theme-color);
+    text-decoration: none;
+    font-size: .9rem;
+    background-color: var(--primary-theme-color);
+    border-bottom: .1em solid var(--secondary-theme-color);
+    color: var(--tertiary-background-color);
+    padding: .6em .8em;
+}
+nav.actions ul li:last-child a {
+    border-bottom: none;
+}
+
+nav.actions i {
+    margin-right: .2em;
 }
 
 footer nav {

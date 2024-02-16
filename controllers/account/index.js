@@ -75,12 +75,37 @@ const validate = (data, rules = CREATE_RULES) => {
     }
 }
 
+router.get("/", (req, res) => {
+    const user = req?.session?.user;
+    if (!user) {
+        return res.redirect("/account/login");
+    }
+    res.render("pages/account/edit", {user})
+})
+
 router.get("/login", (req, res) => {
+    const user = req?.session?.user;
+    if (user) {
+        return res.redirect("/account");
+    }
     res.render("pages/account/login");
 });
 
 router.get("/create", (req, res) => {
+    const user = req?.session?.user;
+    if (user) {
+        return res.redirect("/account");
+    }
     res.render("pages/account/create");
+});
+
+router.get("/logout", (req, res) => {
+    if (req.session) {
+        req.session.user = null;
+        req.session.loggedIn = false;
+    }
+    req.flash("info", "You have successfully been logged out.")
+    res.redirect("/account/login");
 });
 
 router.post("/login", async (req, res) => {
@@ -97,15 +122,15 @@ router.post("/login", async (req, res) => {
                 req.session.loggedIn = true;
                 res.redirect("/");
             } else {
-                req.flash("Invalid email or password");
+                req.flash("error", "Invalid email or password");
                 return res.redirect("/account/login");
             }
         }, err => {
-            req.flash("Invalid email or password");
+            req.flash("error", "Invalid email or password");
             return res.redirect("/account/login");
         });
     } else {
-        req.flash("Invalid email or password");
+        req.flash("error", "Invalid email or password");
         return res.redirect("/account/login");
     }
 });
@@ -143,16 +168,16 @@ router.post("/create", async (req, res) => {
             email: req.body.email,
             password: req.body.password,
         });
+
+        req.session.user = user;
+        req.session.loggedIn = true;
+    
+        res.redirect("/");
     } catch(err) {
         console.error(err);
         req.flash("error", "An unknown error occurred! Please report this!");
         return res.redirect("/account/create");
     }
-
-    req.session.user = user;
-    req.session.loggedIn = true;
-
-    res.redirect("/");
 });
 
 module.exports = router;

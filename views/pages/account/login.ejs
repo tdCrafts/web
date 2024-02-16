@@ -12,6 +12,20 @@
         <div class="wrapper xs-wrapper">
             <section>
                 <h2><i class="fa-solid fa-right-to-bracket"></i> Login to crafty.tools</h2>
+                <% if (messages.info) { %>
+                <div class="alert alert-info">
+                    <strong>Information</strong>
+                    <br>
+                    <%- messages.info %>
+                </div>
+                <% } %>
+                <% if (messages.error) { %>
+                <div class="alert alert-danger">
+                    <strong>Error</strong>
+                    <br>
+                    <%- messages.error %>
+                </div>
+                <% } %>
                 <p>
                     Login with your email and password for extra calculator features, batch tracking, and more!
                 </p>

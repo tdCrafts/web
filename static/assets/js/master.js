@@ -9,7 +9,18 @@ const api = {
                 success: callback,
             },
         );
-    }
+    },
+    put: function(url, data, callback) {
+        $.ajax(
+            {
+                method: "PUT",
+                url,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: callback,
+            },
+        );
+    },
 }
 
 function statusPopup(type, html, hideAfter = null) {

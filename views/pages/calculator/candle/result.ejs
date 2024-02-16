@@ -10,14 +10,61 @@
     <title>Calculator Result - crafty.tools</title>
 </head>
 <body>
-    <%- include("../../../partials/header", {page:"calculator/candle"}) %>
+    <%- include("../../../partials/header", {page:"calculator/candle", user}) %>
     <main>
         <div class="wrapper container container-md">
-            <form class="col-8" id="calculatorResult">
-                <input type="hidden" name="id" value="<%= entry._id %>">
+            <div class="col-3">
+                <section>
+                    <h2><i class="fa-solid fa-computer-mouse-scrollwheel"></i> Actions</h2>
+                    <nav class="actions">
+                        <ul>
+                            <li><a href="/calculator/candle"><i class="fa-solid fa-circle-plus"></i> New Calculation</a></li>
+                            <% if (user) { %>
+                            <% if (entry.owner && String(entry.owner._id) === String(user._id)) { %><li><a href="/calculator/candle/<%= entry._id %>/create-batch"><i class="fa-solid fa-calendar-circle-plus"></i> Create Batch</a></li><% } else { %>
+                            <li><a href="#" class="clone" data-id="<%= entry._id %>"><i class="fa-solid fa-copy"></i> Clone to your Account</a></li><% } %>
+                            <% } %>
+                        </ul>
+                    </nav>
+                </section>
+                <section>
+                    <h2><i class="fa-solid fa-shield-halved"></i> Privacy Settings</h2>
+                    <% if (user) { %>
+                    <% if (String(user._id) === String(entry.owner?._id)) { %>
+                    <form class="privacy">
+                        <div class="form-group">
+                            <label for="visibility">Visibility</label>
+                            <select name="visibility" id="visibility" data-id="<%= entry._id %>">
+                                <option value="public"<%- entry.privacy === "public" ? ` selected="selected"` : "" %>>Public - Anyone with the link can view and edit</option>
+                                <option value="readonly"<%- entry.privacy === "readonly" ? ` selected="selected"` : "" %>>Read-only - Anyone with the link can view</option>
+                                <option value="private"<%- entry.privacy === "private" ? ` selected="selected"` : "" %>>Private - Only you can view and edit</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div class="privacy-warning alert alert-danger"<%- entry.privacy === "public" ? '' : ` style="display:none;"` %>>
+                        <strong>Warning!</strong>
+                        <br>
+                        This calculation has a privacy setting of Public. This means that anyone with the link above can view and make changes to the calculation. It's suggested to change the privacy setting to read-only or private above.
+                    </div>
+                    <% } else { %>
+                    You must own the calculation to change privacy settings! <a href="#" class="clone" data-id="<%= entry._id %>">Clone this calculation to your account.</a>
+                    <% } %>
+                    <% } else { %>
+                    <a href="/account/login">Log in</a> to change privacy settings.
+                    <% } %>
+                </section>
+            </div>
+            <form class="col-9" id="calculatorResult">
+                <input type="hidden" name="id" value="<%= isReadOnly ? "new" : entry._id %>">
                 <section>
                     <h2><i class="fa-solid fa-calculator"></i> Calculation Results</h2>
-                    <input class="button" type="submit" value="Save">
+                    <% if (isReadOnly) { %>
+                    <div class="alert alert-info" onclick="$(this).slideUp(250)">
+                        <strong>This is a read-only calculation.</strong>
+                        <br>
+                        You may make local changes below, however saving will copy this calculation to your account.
+                    </div>
+                    <% } %>
+                    <input class="button" type="submit" value="Save<%= isReadOnly ? " to Your Account" : "" %>">
                     <div class="cont-breakdown">
                         <h2>Containers</h2>
                         <div class="containers">
@@ -32,7 +79,7 @@
                                     <input type="text" name="cont-name[<%= cont._id %>]" id="cont-<%= cont._id %>-name" value="<%= cont.name %>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="cont-<%= cont._id %>-size">Container Size</label>
+                                    <label for="cont-<%= cont._id %>-size">Container&nbsp;Size</label>
                                     <div class="unit-input">
                                         <input type="number" name="cont-size[<%= cont._id %>]" id="cont-<%= cont._id %>-size" min="0" step="0.01" value="<%= cont.size %>">
                                         <select class="unit">
@@ -61,7 +108,7 @@
                             </div>
                         </div>
                         <div class="form-group col-7">
-                            <label for="fragrance-percent">Fragrance Percentage</label>
+                            <label for="fragrance-percent">Fragrance&nbsp;Percentage</label>
                             <div class="unit-input">
                                 <input type="number" name="fragrance-percent" id="fragrance-percent" min="0" max="95" step="0.01" placeholder="% Fragrance of total weight" value="<%= entry.fragrancePercent %>">
                                 <div class="unit unit-percent">%</div>
@@ -95,7 +142,7 @@
                                     <input type="text" name="wax-name[<%= wax._id %>]" id="wax-<%= wax._id %>-name" value="<%= wax.name %>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="wax-<%= wax._id %>-percent">Wax Percent</label>
+                                    <label for="wax-<%= wax._id %>-percent">Wax&nbsp;Percent</label>
                                     <div class="unit-input">
                                         <input type="number" name="wax-percent[<%= wax._id %>]" id="wax-<%= wax._id %>-percent" min="1" max="100" step="0.1" value="<%= wax.percent %>">
                                         <div class="unit unit-percent">%</div>
@@ -128,7 +175,7 @@
                                     <input type="text" name="frag-name[<%= frag._id %>]" id="frag-<%= frag._id %>-name" value="<%= frag.name %>">
                                 </div>
                                 <div class="form-group">
-                                    <label for="frag-<%= frag._id %>-percent">Fragrance Percent</label>
+                                    <label for="frag-<%= frag._id %>-percent">Fragrance&nbsp;Percent</label>
                                     <div class="unit-input">
                                         <input type="number" name="frag-percent[<%= frag._id %>]" id="frag-<%= frag._id %>-percent" min="1" max="100" step="0.1" value="<%= frag.percent %>">
                                         <div class="unit unit-percent">%</div>
@@ -151,19 +198,9 @@
                             <% }) %>
                         </div>
                     </div>
-                    <input class="button" type="submit" value="Save">
+                    <input class="button" type="submit" value="Save<%= isReadOnly ? " to Your Account" : "" %>">
                 </section>
             </form>
-            <div class="col-4">
-                <section>
-                    <h2><i class="fa-solid fa-computer-mouse-scrollwheel"></i> Actions</h2>
-                    <nav class="actions">
-                        <ul>
-                            <li><a href="/calculator/candle" class="button"><i class="fa-solid fa-circle-plus"></i> New Calculation</a></li>
-                        </ul>
-                    </nav>
-                </section>
-            </div>
         </div>
     </main>
     <%- include("../../../partials/footer") %>

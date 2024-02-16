@@ -191,6 +191,10 @@ router.post("/candle/", async (req, res) => {
     };
 
     try {
+        if (req?.session?.user?._id) {
+            entryData.owner = req.session.user._id;
+            entryData.privacy = "readonly";
+        }
         const entry = await CalculatorEntry.create(entryData);
         if (!entry) {
             return res.json({ok: false, error: "Calculator entry not created!"});
@@ -213,6 +217,10 @@ router.post("/candle/:id", async (req, res) => {
         const entry = await CalculatorEntry.findById(req.params.id);
         if (!entry) {
             return res.json({ok: false, error: "Calculator entry not found!"});
+        }
+
+        if (entry.isOwned && entry.privacy !== "public" && !entry.isOwner(req?.session?.user?._id)) {
+            return res.json({ok: false, error: "You must be the owner of this entry to modify it."});
         }
         
         entry.buffer = req.body.buffer;
@@ -295,6 +303,50 @@ router.post("/candle/:id", async (req, res) => {
         });
         
         res.json({ok: true, data: entry, changedIds});
+    } catch(err) {
+        console.error(err);
+        res.json({ok: false, error: "An unknown error occurred!"});
+    }
+});
+
+const VALID_PRIVACY_VALUES = [
+    "public", "readonly", "private",
+]
+router.put("/candle/:id", async (req, res) => {
+    try {
+        const entry = await CalculatorEntry.findById(req.params.id).populate("owner");
+        if (!entry.isOwner(req.session?.user?._id)) {
+            return res.json({ok: false, error: "You do not own this calculator entry and may not update it!"});
+        }
+        if (req.body.hasOwnProperty("privacy") &&
+            VALID_PRIVACY_VALUES.includes(req.body.privacy)) {
+            entry.privacy = req.body.privacy;
+        }
+        await entry.save();
+        res.json({ok: true});
+    } catch(err) {
+        console.error(err);
+        res.json({ok: false, error: "An unknown error occurred!"});
+    }
+});
+
+router.post("/candle/:id/clone", async (req, res) => {
+    if (!req?.session?.user) {
+        res.json({ok: false, error: "You must be logged in to do this!"});
+    }
+
+    try {
+        const entry = await CalculatorEntry.findById(req.params.id);
+        if (!entry) {
+            return res.json({ok: false, error: "Calculator entry not found!"})
+        }
+
+        if (entry.privacy === "private" && !entry.isOwner(req?.session?.user?._id)) {
+            return res.json({ok: false, error: "You don't have access to this entry!"})
+        }
+
+        const newEntry = await entry.cloneEntry(req.session.user._id);
+        res.json({ok: true, data: newEntry})
     } catch(err) {
         console.error(err);
         res.json({ok: false, error: "An unknown error occurred!"});

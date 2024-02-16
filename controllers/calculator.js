@@ -5,23 +5,24 @@ const { CalculatorEntry } = require("../schemas");
 
 router.get("/candle", (req, res) => {
     const user = req?.session?.user;
-    console.log(req.session);
-    console.log(user);
     res.render("pages/calculator/candle/new", {user});
 });
 
 router.get("/candle/:id", async (req, res) => {
     try {
         const user = req?.session?.user;
-        console.log(req.session);
-        console.log(user);
         const entry = await CalculatorEntry.findById(req.params.id);
-        res.render("pages/calculator/candle/result", {entry, user});
-        return;
+        if (entry) {
+            if (entry.privacy !== "private" || (entry.isOwned && entry.isOwner(req?.session?.user?._id))) {
+                const isReadOnly = entry.privacy === "readonly" && !entry.isOwner(req?.session?.user?._id);
+                res.render("pages/calculator/candle/result", {entry, user, isReadOnly});
+                return;
+            }
+        }
     } catch(err) {
         console.error(err);
     }
-    res.send("Unknown calc entry");
+    res.render("pages/calculator/candle/404");
 });
 
 router.get("/", (req, res) => {
