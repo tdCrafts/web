@@ -9,8 +9,8 @@ router.get("/candle", (req, res) => {
 });
 
 router.get("/candle/:id", async (req, res) => {
+    const user = req?.session?.user;
     try {
-        const user = req?.session?.user;
         const entry = await CalculatorEntry.findById(req.params.id);
         if (entry) {
             if (entry.privacy !== "private" || (entry.isOwned && entry.isOwner(req?.session?.user?._id))) {
@@ -22,7 +22,7 @@ router.get("/candle/:id", async (req, res) => {
     } catch(err) {
         console.error(err);
     }
-    res.render("pages/calculator/candle/404");
+    res.render("pages/calculator/candle/404", {user});
 });
 
 router.get("/", (req, res) => {
