@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("../../../partials/head") %>
+
+    <link rel="stylesheet" href="/assets/css/calculator.css">
+
+    <script src="/assets/js/createBatch.js"></script>
+
+    <title>Your Batches - crafty.tools</title>
+</head>
+<body>
+    <%- include("../../../partials/header", {page:"batch/candle", user}) %>
+    <main>
+        <div class="wrapper s-wrapper">
+            <section>
+                <h2><i class="fa-solid fa-ball-pile"></i> Your Batches</h2>
+                <nav class="activity">
+                    <ul>
+                        <% batches.forEach(batch => { %>
+                        <li><a href="/batch/candle/<%= batch._id %>">
+                            <h3><%= batch.calculation.containers.map(x => `${x.quantity}x ${x.name}`).join(", ") %></h3>
+                            <%= batch.calculation.fragrances.map(x => x.name).join(" & ") %>
+                        </a></li>
+                        <% }) %>
+                    </ul>
+                </nav>
+            </section>
+        </div>
+    </main>
+    <%- include("../../../partials/footer") %>
+</body>
+</html>

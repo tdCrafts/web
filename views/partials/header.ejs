@@ -8,7 +8,9 @@ page = locals?.page ? locals.page : "index";
         <nav>
             <ul>
                 <li><a href="/"<% if (page === "index") { %> class="active"<% } %>>Home</a></li>
+                <li><a href="/batch/candle"<% if (page === "batch/candle") { %> class="active"<% } %>>Candle Batch</a></li>
                 <li><a href="/calculator/candle"<% if (page === "calculator/candle") { %> class="active"<% } %>>Candle Calculator</a></li>
+                <li><a href="/account"<% if (page.startsWith("account/")) { %> class="active"<% } %>><%= locals?.user ? "Account" : "Login" %></a></li>
             </ul>
         </nav>
     </div>

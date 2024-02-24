@@ -286,10 +286,12 @@ $(function() {
         const form = $(this);
         const data = parseData(form);
         const isNew = data.id === "new";
+        statusPopup("info", "Saving...");
         api.post(`/api/calculator/candle/${isNew ? "" : data.id}`, data, function(data) {
             if (data.ok) {
                 formHasChanged = false;
                 if (isNew) {
+                    formHasChanged = false;
                     window.location.href = "/calculator/candle/" + data.data._id;
                 } else {
                     data.changedIds.forEach(changedId => {
@@ -314,6 +316,28 @@ $(function() {
     }
 
     $(".remove a").on("click", handleRemove);
+
+    $("#visibility").on("change", function() {
+        const ele = $(this);
+        const value = ele.val();
+        const entryId = ele.attr("data-id");
+        if (!value || !entryId) {
+            return statusPopup("danger", "Invalid entry ID or value!");
+        }
+        statusPopup("info", "Saving...");
+        api.put(`/api/calculator/candle/${entryId}`, {privacy: value}, function(data) {
+            if (data.ok) {
+                statusPopup("success", "Privacy setting changed successfully!", 2500);
+                if (value === "public") {
+                    $(".privacy-warning").slideDown(250);
+                } else {
+                    $(".privacy-warning").slideUp(250);
+                }
+            } else {
+                statusPopup("danger", data.error, 2500);
+            }
+        });
+    });
 
     // all of these are similar yet different. maybe wrap into function?
     $(".add-container").on("click", function() {
@@ -372,6 +396,42 @@ $(function() {
         ele.find("input")[0].focus();
         ele.find(".remove a").on("click", handleRemove);
         updateCalculator(form);
+        return false;
+    });
+
+    $(".clone").on("click", function() {
+        const ele = $(this);
+        const entryId = ele.attr("data-id");
+        if (!entryId) {
+            return statusPopup("danger", "Invalid ID given", 2500);
+        }
+        statusPopup("info", "Cloning...");
+        api.post(`/api/calculator/candle/${entryId}/clone`, {}, function(data) {
+            if (data.ok) {
+                formHasChanged = false;
+                window.location.href = "/calculator/candle/" + data.data._id;
+            } else {
+                statusPopup("danger", data.error);
+            }
+        });
+        return false;
+    });
+
+    $(".delete").on("click", function() {
+        const ele = $(this);
+        const entryId = ele.attr("data-id");
+        if (!entryId) {
+            return statusPopup("danger", "Invalid ID given", 2500);
+        }
+        statusPopup("info", "Deleting...");
+        api.delete(`/api/calculator/candle/${entryId}`, function(data) {
+            if (data.ok) {
+                formHasChanged = false;
+                window.location.href = "/calculator/candle?deleted=true";
+            } else {
+                statusPopup("danger", data.error);
+            }
+        });
         return false;
     });
 });

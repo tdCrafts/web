@@ -4,12 +4,9 @@ const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = 10;
 
 const schema = new mongoose.Schema({
+    firstName: String,
+    lastName: String,
     email: {
-        type: String,
-        required: true,
-        index: true,
-    },
-    username: {
         type: String,
         required: true,
         index: {
@@ -20,15 +17,19 @@ const schema = new mongoose.Schema({
     discordId: String,
 });
 
+schema.virtual("fullName")
+    .get(function() {
+        return this.firstName + " " + this.lastName;
+    });
+
 schema.pre("save", function(next) {
     if (!this.isModified("password")) return next();
 
-    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
         if (err) return next(err);
 
-        bcrypt.hash(this.password, salt, function(err, hash) {
+        bcrypt.hash(this.password, salt, (err, hash) => {
             if (err) return next(err);
-
             this.password = hash;
             next();
         });
