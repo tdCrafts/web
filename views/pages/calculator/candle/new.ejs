@@ -23,6 +23,32 @@
                         </ul>
                     </nav>
                 </section>
+                <section>
+                    <h2><i class="fa-solid fa-timer"></i> Recent Calculations</h2>
+                    <% if (user) { %>
+                    <nav class="activity">
+                        <ul>
+                            <% recentCalculations.forEach(activity => { %>
+                            <li>
+                                <a class="activity" href="/calculator/candle/<%= activity.candleEntry._id %>">
+                                    <h3><%= activity.candleEntry.containers.map(x => `${x.quantity}x ${x.name}`).join(", ") %></h3>
+                                    <%= activity.candleEntry.fragrances.map(x => x.name).join(" & ") %>
+                                    <br>
+                                    <small>
+                                        <%= relativeTime(Date.now() - activity.time) %>
+                                    </small>
+                                </a>
+                            </li>
+                            <% }) %>
+                            <% if (recentCalculations.length === 0) { %>
+                            <li class="none">No calculations yet!</li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                    <% } else { %>
+                    <a href="/account/login">Log in</a> to track recent calculations!
+                    <% } %>
+                </section>
             </div>
             <form class="col-9" id="calculatorResult">
                 <input type="hidden" name="id" value="new">

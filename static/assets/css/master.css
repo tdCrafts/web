@@ -116,27 +116,74 @@ header nav a:hover::after {
     width: 100%;
 }
 
-nav.actions ul {
+nav.actions ul,
+nav.activity ul {
     display: block;
     border-radius: .2em;
     overflow: hidden;
+    box-shadow: var(--shadow);
 }
 
-nav.actions ul li a {
+nav.activity ul {
+    border: .05em solid rgba(0,0,0,0.1);
+}
+
+nav.actions ul li a,
+nav.activity ul li a {
     display: block;
     text-decoration: none;
     font-size: .9rem;
+    padding: .6em .8em;
     background-color: var(--primary-theme-color);
     border-bottom: .1em solid var(--secondary-theme-color);
     color: var(--tertiary-background-color);
-    padding: .6em .8em;
+    transition: .25s background-color;
 }
-nav.actions ul li:last-child a {
+
+nav.actions ul li a:hover {
+    background-color: var(--secondary-theme-color);
+}
+
+nav.activity ul li a {
+    background-color: var(--secondary-background-color);
+    border-bottom: .05em solid rgba(0,0,0,0.1);
+    color: var(--primary-text-color);
+}
+
+nav.activity ul li a:hover {
+    background-color: var(--primary-background-color);
+}
+
+nav.activity ul li a h3 {
+    font-size: 1em;
+    font-family: "Libre Baskerville", serif;
+    font-weight: 700;
+    margin: 0 0 .4em 0;
+}
+
+nav.actions ul li:last-child a,
+nav.activity ul li:last-child a {
     border-bottom: none;
+}
+
+nav .none {
+    text-align: center;
+    font-size: .9em;
+    padding: .4em;
 }
 
 nav.actions i {
     margin-right: .2em;
+}
+
+code {
+    display: inline-block;
+    background-color: var(--primary-background-color);
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: .2em .4em;
+    margin: 0 .4em;
+    vertical-align: middle;
+    border-radius: .1em;
 }
 
 footer nav {
@@ -155,6 +202,10 @@ footer nav a {
 
 .xs-wrapper {
     max-width: 32em;
+}
+
+.s-wrapper {
+    max-width: 50em;
 }
 
 section {

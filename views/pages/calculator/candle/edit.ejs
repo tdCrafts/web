@@ -20,7 +20,10 @@
                         <ul>
                             <li><a href="/calculator/candle"><i class="fa-solid fa-circle-plus"></i> New Calculation</a></li>
                             <% if (user) { %>
-                            <% if (entry.owner && String(entry.owner._id) === String(user._id)) { %><li><a href="/calculator/candle/<%= entry._id %>/create-batch"><i class="fa-solid fa-calendar-circle-plus"></i> Create Batch</a></li><% } else { %>
+                            <% if (entry.isOwner(user._id)) { %>
+                            <li><a href="/calculator/candle/<%= entry._id %>/create-batch"><i class="fa-solid fa-calendar-circle-plus"></i> Create Batch</a></li>
+                            <li><a href="#" class="delete" data-id="<%= entry._id %>"><i class="fa-solid fa-trash"></i> Delete</a></li>
+                            <% } else { %>
                             <li><a href="#" class="clone" data-id="<%= entry._id %>"><i class="fa-solid fa-copy"></i> Clone to your Account</a></li><% } %>
                             <% } %>
                         </ul>
@@ -50,6 +53,67 @@
                     <% } %>
                     <% } else { %>
                     <a href="/account/login">Log in</a> to change privacy settings.
+                    <% } %>
+                </section>
+                <section>
+                    <h2><i class="fa-solid fa-timer"></i> Recent Calculations</h2>
+                    <% if (user) { %>
+                    <nav class="activity">
+                        <ul>
+                            <% recentCalculations.forEach(activity => { %>
+                            <li>
+                                <a class="activity" href="/calculator/candle/<%= activity.candleEntry._id %>">
+                                    <h3><%= activity.candleEntry.containers.map(x => `${x.quantity}x ${x.name}`).join(", ") %></h3>
+                                    <%= activity.candleEntry.fragrances.map(x => x.name).join(" & ") %>
+                                    <br>
+                                    <small>
+                                        <% if (activity.candleEntry._id.equals(entry._id)) { %>
+                                        Current calculator entry
+                                        <% } else { %>
+                                        <%= relativeTime(Date.now() - activity.time) %>
+                                        <% } %>
+                                    </small>
+                                </a>
+                            </li>
+                            <% }) %>
+                            <% if (recentCalculations.length === 0) { %>
+                            <li class="none">No calculations yet!</li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                    <% } else { %>
+                    <a href="/account/login">Log in</a> to track recent calculations!
+                    <% } %>
+                </section>
+                <section>
+                    <h2><i class="fa-solid fa-timer"></i> Recent Batches</h2>
+                    <% if (user) { %>
+                    <nav class="activity">
+                        <ul>
+                            <% recentBatches.forEach(activity => {
+                                entry = activity.candleBatch.calculation %>
+                            <li>
+                                <a class="activity" href="/calculator/candle/<%= entry._id %>">
+                                    <h3><%= entry.containers.map(x => `${x.quantity}x ${x.name}`).join(", ") %></h3>
+                                    <%= entry.fragrances.map(x => x.name).join(" & ") %>
+                                    <br>
+                                    <small>
+                                        <% if (entry._id.equals(entry._id)) { %>
+                                        Current batch
+                                        <% } else { %>
+                                        <%= relativeTime(Date.now() - activity.time) %>
+                                        <% } %>
+                                    </small>
+                                </a>
+                            </li>
+                            <% }) %>
+                            <% if (recentCalculations.length === 0) { %>
+                            <li class="none">No calculations yet!</li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                    <% } else { %>
+                    <a href="/account/login">Log in</a> to track recent calculations!
                     <% } %>
                 </section>
             </div>

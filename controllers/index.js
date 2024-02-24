@@ -27,6 +27,9 @@ router.use("/account", account);
 const api = require("./api");
 router.use("/api", api);
 
+const batch = require("./batch");
+router.use("/batch", batch);
+
 const calculator = require("./calculator");
 router.use("/calculator", calculator);
 

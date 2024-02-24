@@ -1,0 +1,15 @@
+h3 {
+    text-align: center;
+    font-family: "Libre Baskerville", sans-serif;
+    padding-bottom: .6em;
+    margin: .6em 1em;
+    border-bottom: .1em solid rgba(0,0,0,0.1);
+}
+
+.container-sm .results {
+    display: block;
+}
+
+.container-sm .results > div {
+    max-width: 100%;
+}

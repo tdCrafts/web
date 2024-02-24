@@ -7,11 +7,24 @@ const schema = new mongoose.Schema({
         index: true,
         required: true,
     },
-    entry: {
+    privacy: {
+        type: String,
+        enum: ["readonly", "private"],
+        default: "private",
+    },
+    fragranceNames: {
+        type: [String],
+        default: [],
+    },
+    calculation: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "CalculatorEntry",
         index: true,
         required: true,
+    },
+    date: {
+        type: Date,
+        default: Date.now,
     }
 }, {
     toJSON: {

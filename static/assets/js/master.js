@@ -1,3 +1,7 @@
+const errorFunc = function(e, textStatus, errorThrown) {
+    statusPopup("danger", `Failed request to server: ${errorThrown} (${textStatus})`, 5000);
+}
+
 const api = {
     post: function(url, data, callback) {
         $.ajax(
@@ -7,6 +11,7 @@ const api = {
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: callback,
+                error: errorFunc,
             },
         );
     },
@@ -18,6 +23,18 @@ const api = {
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: callback,
+                error: errorFunc,
+            },
+        );
+    },
+    delete: function(url, callback) {
+        $.ajax(
+            {
+                method: "DELETE",
+                url,
+                contentType: "application/json",
+                success: callback,
+                error: errorFunc,
             },
         );
     },

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 
-const {CalculatorEntry} = require("../../schemas");
+const {Activity, CalculatorEntry} = require("../../schemas");
 
 router.use(bodyParser.json());
 
@@ -200,6 +200,10 @@ router.post("/candle/", async (req, res) => {
             return res.json({ok: false, error: "Calculator entry not created!"});
         }
         res.json({ok: true, data: entry});
+
+        if (req?.session?.user?._id) {
+            Activity.create({user: req.session.user._id, candleEntry: entry, action: "create"}).catch(console.error);
+        }
     } catch(err) {
         console.error(err);
         res.json({ok: false, error: "An unknown error occurred"});
@@ -279,6 +283,10 @@ router.post("/candle/:id", async (req, res) => {
 
         await entry.save();
 
+        if (req?.session?.user?._id) {
+            Activity.create({user: req.session.user._id, candleEntry: entry, action: "edit"}).catch(console.error);
+        }
+
         let changedIds = [];
 
         newContainers.forEach(newItem => {
@@ -324,6 +332,28 @@ router.put("/candle/:id", async (req, res) => {
         }
         await entry.save();
         res.json({ok: true});
+
+        if (req?.session?.user?._id) {
+            Activity.create({user: req.session.user._id, candleEntry: entry, action: "edit"}).catch(console.error);
+        }
+    } catch(err) {
+        console.error(err);
+        res.json({ok: false, error: "An unknown error occurred!"});
+    }
+});
+
+router.delete("/candle/:id", async (req, res) => {
+    try {
+        const entry = await CalculatorEntry.findById(req.params.id).populate("owner");
+        if (!entry.isOwner(req.session?.user?._id)) {
+            return res.json({ok: false, error: "You do not own this calculator entry and may not delete it!"});
+        }
+        await entry.deleteOne();
+        res.json({ok: true});
+
+        if (req?.session?.user?._id) {
+            Activity.create({user: req.session.user._id, candleEntry: entry, action: "delete"}).catch(console.error);
+        }
     } catch(err) {
         console.error(err);
         res.json({ok: false, error: "An unknown error occurred!"});
@@ -346,7 +376,9 @@ router.post("/candle/:id/clone", async (req, res) => {
         }
 
         const newEntry = await entry.cloneEntry(req.session.user._id);
-        res.json({ok: true, data: newEntry})
+        res.json({ok: true, data: newEntry});
+
+        Activity.create({user: req.session.user._id, candleEntry: entry, action: "create"}).catch(console.error);
     } catch(err) {
         console.error(err);
         res.json({ok: false, error: "An unknown error occurred!"});
