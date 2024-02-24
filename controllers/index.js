@@ -10,7 +10,8 @@ const store = new MongoDBStore({
     uri: process.env.MONGO_URI,
     collection: 'sessions'
 });
-
+console.log(process.env.DEVELOPMENT)
+console.log(typeof(process.env.DEVELOPMENT))
 router.use(cookieParser());
 router.use(session({
     resave: false,
