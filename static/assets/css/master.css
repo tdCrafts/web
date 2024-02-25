@@ -11,6 +11,7 @@
     --secondary-theme-color: #1f6791;
 
     --shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    --heavy-shadow: 2px 2px 8px rgba(0,0,0,0.3);
 }
 
 body {

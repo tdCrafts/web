@@ -60,9 +60,24 @@ input[type=date],
     padding: .6em .8em;
     border: none;
     border-radius: .2em;
+    box-shadow: var(--shadow);
+    transition: .25s;
     /* anchor button styles */
     display: inline-block;
     text-decoration: none;
     /* input styles */
     cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--secondary-theme-color);
+    box-shadow: var(--heavy-shadow);
+}
+
+.button.button-danger {
+    background-color: #cc3241;
+}
+
+.button.button-danger:hover {
+    background-color: #b0212f;
 }
