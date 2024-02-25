@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {User} = require("../../schemas");
+const {validateForm} = require("../../utils/");
 
 const bodyParser = require("body-parser");
 
@@ -40,29 +41,8 @@ const CREATE_RULES = [
 ];
 
 const validate = (data, rules = CREATE_RULES) => {
-    const errors = [];
-
-    rules.forEach(rule => {
-        const value = data[rule.prop];
-        if (!value || value.length === 0) {
-            if (rule.required) {
-                return errors.push(`${rule.prettyProp} is required`);
-            }
-        } else {
-            if (rule.hasOwnProperty("minlength") && value.length < rule.minlength) {
-                return errors.push(`${rule.prettyProp} requires at least ${rule.minlength} characters`);
-            }
-
-            if (rule.hasOwnProperty("maxlength") && value.length > rule.maxlength) {
-                return errors.push(`${rule.prettyProp} must have no more than ${rule.maxlength} characters`);
-            }
-
-            if (rule.hasOwnProperty("regex") && !value.match(rule.regex)) {
-                return errors.push(rule.regexMessage);
-            }
-        }
-    });
-
+    let errors = validateForm(data, rules);
+    
     if (data.password && data.confirmPassword &&
         data.password !== data.confirmPassword) {
         errors.push("Password confirmation does not match!");
